@@ -1,0 +1,29 @@
+@startuml VCenter Configuration and Discovery
+
+clients --- [API Gateway]
+
+component "Microservice\n VCenter Configuration Service" {
+    port Grpc.1
+    port Pub
+    port Rest.1
+    component [SQL Server CS]
+    component [Configuration Service]
+}
+
+component [RabbitMQ Message Bus]
+Pub --> [RabbitMQ Message Bus]
+
+component "Microservice\n VCenter Discovery Service" {
+    port Rest.2
+    port Grpc.2
+    port Subscr
+    component [SQL Server DS]
+    component [Discovery Service]
+}
+
+[RabbitMQ Message Bus] -----> Subscr
+[API Gateway] ...> Rest.1
+[API Gateway] ....> Rest.2
+Grpc.1 --- Grpc.2
+
+@enduml
